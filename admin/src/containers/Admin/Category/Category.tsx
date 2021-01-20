@@ -18,6 +18,8 @@ import {
 import { Plus } from "assets/icons/Plus";
 import * as icons from "assets/icons/category-icons";
 import NoResult from "components/Admin/NoResult/NoResult";
+import useCategory from "services/use-category";
+import { PencilIcon } from "assets/icons/PencilIcon";
 
 const GET_CATEGORIES = gql`
   query getCategories($type: String, $searchBy: String) {
@@ -60,39 +62,46 @@ export default function Category() {
   const dispatch = useDrawerDispatch();
   const [checkedId, setCheckedId] = useState([]);
   const [checked, setChecked] = useState(false);
+
   const openDrawer = useCallback(
     () => dispatch({ type: "OPEN_DRAWER", drawerComponent: "CATEGORY_FORM" }),
     [dispatch]
   );
 
-  const { data, error, refetch } = useQuery(GET_CATEGORIES);
+  const editCategory = category => {
+    dispatch({ type: "OPEN_DRAWER", drawerComponent: "CATEGORY_FORM", data: { category } });
+  };
+
+  // const { categories, error, refetch } = useQuery(GET_CATEGORIES);
+  const { categories, error, loading } = useCategory(search);
+
   if (error) {
     return <div>Error! {error.message}</div>;
   }
   function handleSearch(event) {
     const value = event.currentTarget.value;
     setSearch(value);
-    refetch({
-      type: category.length ? category[0].value : null,
-      searchBy: value,
-    });
+    // refetch({
+    //   type: category.length ? category[0].value : null,
+    //   searchBy: value,
+    // });
   }
   function handleCategory({ value }) {
     setCategory(value);
-    if (value.length) {
-      refetch({
-        type: value[0].value,
-      });
-    } else {
-      refetch({
-        type: null,
-      });
-    }
+    // if (value.length) {
+    //   refetch({
+    //     type: value[0].value,
+    //   });
+    // } else {
+    //   refetch({
+    //     type: null,
+    //   });
+    // }
   }
 
   function onAllCheck(event) {
     if (event.target.checked) {
-      const idx = data && data.categories.map(current => current.id);
+      const idx = categories.map(current => current.id);
       setCheckedId(idx);
     } else {
       setCheckedId([]);
@@ -101,6 +110,7 @@ export default function Category() {
   }
 
   function handleCheckbox(event) {
+    debugger;
     const { name } = event.currentTarget;
     if (!checkedId.includes(name)) {
       setCheckedId(prevState => [...prevState, name]);
@@ -129,7 +139,7 @@ export default function Category() {
 
             <Col md={10}>
               <Row>
-                <Col md={3} lg={3}>
+                {/* <Col md={3} lg={3}>
                   <Select
                     options={categorySelectOptions}
                     labelKey="label"
@@ -139,7 +149,7 @@ export default function Category() {
                     searchable={false}
                     onChange={handleCategory}
                   />
-                </Col>
+                </Col> */}
 
                 <Col md={5} lg={6}>
                   <Input
@@ -174,8 +184,8 @@ export default function Category() {
           </Header>
 
           <Wrapper style={{ boxShadow: "0 0 5px rgba(0, 0 , 0, 0.05)" }}>
-            <TableWrapper>
-              <StyledTable $gridTemplateColumns="minmax(70px, 70px) minmax(70px, 70px) minmax(70px, 70px) minmax(150px, auto) minmax(150px, auto) auto">
+            <TableWrapper style={{ height: "auto" }}>
+              <StyledTable $gridTemplateColumns="minmax(70px, 70px) minmax(70px, 70px) minmax(180px, 180px) auto minmax(135px, 135px)">
                 <StyledHeadCell>
                   <Checkbox
                     type="checkbox"
@@ -199,49 +209,75 @@ export default function Category() {
                   />
                 </StyledHeadCell>
                 <StyledHeadCell>Id</StyledHeadCell>
-                <StyledHeadCell>Image</StyledHeadCell>
+                {/* <StyledHeadCell>Image</StyledHeadCell> */}
                 <StyledHeadCell>Name</StyledHeadCell>
-                <StyledHeadCell>Slug</StyledHeadCell>
-                <StyledHeadCell>Type</StyledHeadCell>
+                <StyledHeadCell>Description</StyledHeadCell>
+                <StyledHeadCell>Action</StyledHeadCell>
 
-                {data ? (
-                  data.categories.length ? (
-                    data.categories
-                      .map(item => Object.values(item))
-                      .map((row, index) => (
-                        <React.Fragment key={index}>
-                          <StyledCell>
-                            <Checkbox
-                              name={row[1]}
-                              checked={checkedId.includes(row[1])}
-                              onChange={handleCheckbox}
-                              overrides={{
-                                Checkmark: {
-                                  style: {
-                                    borderTopWidth: "2px",
-                                    borderRightWidth: "2px",
-                                    borderBottomWidth: "2px",
-                                    borderLeftWidth: "2px",
-                                    borderTopLeftRadius: "4px",
-                                    borderTopRightRadius: "4px",
-                                    borderBottomRightRadius: "4px",
-                                    borderBottomLeftRadius: "4px",
-                                  },
+                {categories ? (
+                  categories.length ? (
+                    categories.map((item, index) => (
+                      <React.Fragment key={index}>
+                        <StyledCell>
+                          <Checkbox
+                            name={item.id}
+                            checked={checkedId.includes(item.id)}
+                            onChange={handleCheckbox}
+                            overrides={{
+                              Checkmark: {
+                                style: {
+                                  borderTopWidth: "2px",
+                                  borderRightWidth: "2px",
+                                  borderBottomWidth: "2px",
+                                  borderLeftWidth: "2px",
+                                  borderTopLeftRadius: "4px",
+                                  borderTopRightRadius: "4px",
+                                  borderBottomRightRadius: "4px",
+                                  borderBottomLeftRadius: "4px",
                                 },
-                              }}
-                            />
-                          </StyledCell>
-                          <StyledCell>{row[1]}</StyledCell>
-                          <StyledCell>
+                              },
+                            }}
+                          />
+                        </StyledCell>
+                        <StyledCell>{item.id}</StyledCell>
+                        {/* <StyledCell>
                             <ImageWrapper>
                               <Icon name={row[2]} />
                             </ImageWrapper>
-                          </StyledCell>
-                          <StyledCell>{row[3]}</StyledCell>
-                          <StyledCell>{row[4]}</StyledCell>
-                          <StyledCell>{row[5]}</StyledCell>
-                        </React.Fragment>
-                      ))
+                          </StyledCell> */}
+                        <StyledCell>{item.name}</StyledCell>
+                        <StyledCell>{item.description}</StyledCell>
+                        {/* <StyledCell>{row[5]}</StyledCell> */}
+                        <StyledCell>
+                          <Button
+                            overrides={{
+                              BaseButton: {
+                                style: ({ $theme }) => ({
+                                  padding: "2px 7px",
+                                  marginRight: "2px",
+                                }),
+                              },
+                            }}
+                            onClick={() => editCategory(item)}
+                          >
+                            Edit
+                          </Button>
+
+                          <Button
+                            overrides={{
+                              BaseButton: {
+                                style: ({ $theme }) => ({
+                                  padding: "2px 7px",
+                                  backgroundColor: "#fe5960",
+                                }),
+                              },
+                            }}
+                          >
+                            Delete
+                          </Button>
+                        </StyledCell>
+                      </React.Fragment>
+                    ))
                   ) : (
                     <NoResult
                       hideButton={false}

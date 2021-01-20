@@ -1,13 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
-import { v4 as uuidv4 } from "uuid";
-import { useMutation, gql } from "@apollo/client";
-import { useDrawerDispatch } from "context/Admin/DrawerContext";
+import { useDrawerDispatch, useDrawerState } from "context/Admin/DrawerContext";
 import { Scrollbars } from "react-custom-scrollbars";
-import Uploader from "components/Admin/Uploader/Uploader";
-import Input from "components/Admin/Input/Input";
-import Select from "components/Admin/Select/Select";
-import Button, { KIND } from "components/Admin/Button/Button";
 import DrawerBox from "components/Admin/DrawerBox/DrawerBox";
 import { Row, Col } from "components/Admin/FlexBox/FlexBox";
 import {
@@ -18,84 +12,55 @@ import {
   ButtonGroup,
 } from "../DrawerItems/DrawerItems.style";
 import { FormFields, FormLabel } from "components/Admin/FormFields/FormFields";
+import { Input } from "baseui/input";
+import { Button, KIND } from "baseui/button";
+import { Textarea } from "components/Admin/Textarea/Textarea";
 
-const GET_CATEGORIES = gql`
-  query getCategories($type: String, $searchBy: String) {
-    categories(type: $type, searchBy: $searchBy) {
-      id
-      icon
-      name
-      slug
-      type
-    }
-  }
-`;
-const CREATE_CATEGORY = gql`
-  mutation createCategory($category: AddCategoryInput!) {
-    createCategory(category: $category) {
-      id
-      name
-      type
-      icon
-      # creation_date
-      slug
-      # number_of_product
-    }
-  }
-`;
-
-const options = [
-  { value: "grocery", name: "Grocery", id: "1" },
-  { value: "women-cloths", name: "Women Cloths", id: "2" },
-  { value: "bags", name: "Bags", id: "3" },
-  { value: "makeup", name: "Makeup", id: "4" },
-];
 type Props = any;
 
 const AddCategory: React.FC<Props> = props => {
+  let { category } = useDrawerState("data");
   const dispatch = useDrawerDispatch();
   const closeDrawer = useCallback(() => dispatch({ type: "CLOSE_DRAWER" }), [dispatch]);
-  const { register, handleSubmit, setValue } = useForm();
-  const [category, setCategory] = useState([]);
-  React.useEffect(() => {
-    register({ name: "parent" });
-    register({ name: "image" });
-  }, [register]);
-  const [createCategory] = useMutation(CREATE_CATEGORY, {
-    update(cache, { data: { createCategory } }) {
-      const { categories } = cache.readQuery({
-        query: GET_CATEGORIES,
-      });
-
-      cache.writeQuery({
-        query: GET_CATEGORIES,
-        data: { categories: categories.concat([createCategory]) },
-      });
-    },
+  const { register, handleSubmit, setValue } = useForm({
+    defaultValues: category ? { ...category } : {},
   });
 
-  const onSubmit = ({ name, slug, parent, image }) => {
+  // React.useEffect(() => {
+  //   register({ name: "parent" });
+  //   register({ name: "image" });
+  // }, [register]);
+
+  // const [createCategory] = useMutation(CREATE_CATEGORY, {
+  //   update(cache, { data: { createCategory } }) {
+  //     const { categories } = cache.readQuery({
+  //       query: GET_CATEGORIES,
+  //     });
+
+  //     cache.writeQuery({
+  //       query: GET_CATEGORIES,
+  //       data: { categories: categories.concat([createCategory]) },
+  //     });
+  //   },
+  // });
+
+  const onSubmit = ({ name, description }) => {
     const newCategory = {
-      id: uuidv4(),
       name: name,
-      type: parent[0].value,
-      slug: slug,
-      icon: image,
+      description: description,
       creation_date: new Date(),
     };
-    createCategory({
-      variables: { category: newCategory },
-    });
-    closeDrawer();
+    // call for create
     console.log(newCategory, "newCategory");
+    closeDrawer();
   };
-  const handleChange = ({ value }) => {
-    setValue("parent", value);
-    setCategory(value);
-  };
-  const handleUploader = files => {
-    setValue("image", files[0].path);
-  };
+  // const handleChange = ({ value }) => {
+  //   setValue("parent", value);
+  //   setCategory(value);
+  // };
+  // const handleUploader = files => {
+  //   setValue("image", files[0].path);
+  // };
 
   return (
     <>
@@ -113,32 +78,6 @@ const AddCategory: React.FC<Props> = props => {
         >
           <Row>
             <Col lg={4}>
-              <FieldDetails>Upload your Category image here</FieldDetails>
-            </Col>
-            <Col lg={8}>
-              <DrawerBox
-                overrides={{
-                  Block: {
-                    style: {
-                      width: "100%",
-                      height: "auto",
-                      padding: "30px",
-                      borderRadius: "3px",
-                      backgroundColor: "#ffffff",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    },
-                  },
-                }}
-              >
-                <Uploader onChange={handleUploader} />
-              </DrawerBox>
-            </Col>
-          </Row>
-
-          <Row>
-            <Col lg={4}>
               <FieldDetails>
                 Add your category description and necessary informations from here
               </FieldDetails>
@@ -152,64 +91,8 @@ const AddCategory: React.FC<Props> = props => {
                 </FormFields>
 
                 <FormFields>
-                  <FormLabel>Slug</FormLabel>
-                  <Input inputRef={register({ pattern: /^[A-Za-z]+$/i })} name="slug" />
-                </FormFields>
-
-                <FormFields>
-                  <FormLabel>Parent</FormLabel>
-                  <Select
-                    options={options}
-                    labelKey="name"
-                    valueKey="value"
-                    placeholder="Ex: Choose parent category"
-                    value={category}
-                    searchable={false}
-                    onChange={handleChange}
-                    overrides={{
-                      Placeholder: {
-                        style: ({ $theme }) => {
-                          return {
-                            ...$theme.typography.fontBold14,
-                            color: $theme.colors.textNormal,
-                          };
-                        },
-                      },
-                      DropdownListItem: {
-                        style: ({ $theme }) => {
-                          return {
-                            ...$theme.typography.fontBold14,
-                            color: $theme.colors.textNormal,
-                          };
-                        },
-                      },
-                      OptionContent: {
-                        style: ({ $theme, $selected }) => {
-                          return {
-                            ...$theme.typography.fontBold14,
-                            color: $selected ? $theme.colors.textDark : $theme.colors.textNormal,
-                          };
-                        },
-                      },
-                      SingleValue: {
-                        style: ({ $theme }) => {
-                          return {
-                            ...$theme.typography.fontBold14,
-                            color: $theme.colors.textNormal,
-                          };
-                        },
-                      },
-                      Popover: {
-                        props: {
-                          overrides: {
-                            Body: {
-                              style: { zIndex: 5 },
-                            },
-                          },
-                        },
-                      },
-                    }}
-                  />
+                  <FormLabel>Description</FormLabel>
+                  <Input inputRef={register({ required: true })} name="description" />
                 </FormFields>
               </DrawerBox>
             </Col>

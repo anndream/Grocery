@@ -4,7 +4,7 @@ import Button from "components/Admin/Button/Button";
 import Popover, { PLACEMENT } from "components/Admin/Popover/Popover";
 import Notification from "components/Admin/Notification/Notification";
 import { AuthContext } from "context/Admin/auth";
-import { STAFF_MEMBERS, SETTINGS } from "settings/Admin/constants";
+import { STAFF_MEMBERS, SETTINGS } from "utils/constants";
 import { NotificationIcon } from "assets/icons/NotificationIcon";
 import { AlertDotIcon } from "assets/icons/AlertDotIcon";
 import { ArrowLeftRound } from "assets/icons/ArrowLeftRound";

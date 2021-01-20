@@ -1,5 +1,5 @@
-import React from 'react';
-import { Input as BaseInput, SIZE } from 'baseui/input';
+import React from "react";
+import { Input as BaseInput, SIZE } from "baseui/input";
 
 const getInputFontStyle = ({ $theme }) => {
   return {

@@ -14,3 +14,5 @@ export const SITE_SETTINGS = "/site-settings";
 // **************** ROUTE CONSTANT END **************************
 
 export const CURRENCY = "$";
+export const TOKEN_KEY = "access_token";
+export const TEST_TOKEN = "Bearer 1|vyETodUeKtMeTala0LLAOVuWkeCcBnlGl9PFk3uh";

@@ -1,12 +1,12 @@
 import React from "react";
-import useComponentSize from "settings/Admin/useComponentSize";
+import useComponentSize from "utils/useComponentSize";
 import Sidebar from "./Sidebar/Sidebar";
 import Topbar from "./Topbar/Topbar";
 import DrawerItems from "../DrawerItems/DrawerItems";
 import { DrawerProvider } from "context/Admin/DrawerContext";
 import { LayoutWrapper, ContentWrapper, ContentInnerWrapper } from "./Layout.style";
 import { styled } from "baseui";
-import { useMedia } from "settings/Admin/use-media";
+import { useMedia } from "utils/use-media";
 
 const SidedbarDesktop = styled("div", () => ({
   "@media only screen and (max-width: 1199px)": {

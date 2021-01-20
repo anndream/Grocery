@@ -7,20 +7,20 @@ const Title = styled("h3", ({ $theme }) => ({
   marginTop: "0",
   marginBottom: "0",
   color: $theme.colors.textDark,
-  textAlign: "center"
+  textAlign: "center",
 }));
 
 const Label = styled("label", ({ $theme }) => ({
   ...$theme.typography.fontBold14,
   marginBottom: "10px",
-  color: $theme.colors.textDark
+  color: $theme.colors.textDark,
 }));
 
 const Msg = styled("span", ({ $theme }) => ({
   ...$theme.typography.fontBold12,
   color: $theme.colors.red400,
   marginTop: "5px",
-  marginLeft: "auto"
+  marginLeft: "auto",
 }));
 
 export const FormFields = ({ children }) => {
@@ -35,18 +35,18 @@ export const FormFields = ({ children }) => {
             margin: "20px 0",
 
             ":first-child": {
-              marginTop: 0
+              marginTop: 0,
             },
 
             ":last-child": {
-              marginBottom: 0
+              marginBottom: 0,
             },
 
             ":only-child": {
-              margin: 0
-            }
-          }
-        }
+              margin: 0,
+            },
+          },
+        },
       }}
     >
       {children}

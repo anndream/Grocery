@@ -1,5 +1,5 @@
-import React from 'react';
-import { Textarea as BaseTextarea, SIZE } from 'baseui/textarea';
+import React from "react";
+import { Textarea as BaseTextarea, SIZE } from "baseui/textarea";
 
 const getInputFontStyle = ({ $theme }) => {
   return {

@@ -9,7 +9,7 @@ import { Header, Heading } from "components/Wrapper.style";
 import Fade from "react-reveal/Fade";
 import ProductCard from "components/Admin/ProductCard/ProductCard";
 import NoResult from "components/Admin/NoResult/NoResult";
-import { CURRENCY } from "settings/Admin/constants";
+import { CURRENCY } from "utils/constants";
 import Placeholder from "components/Admin/Placeholder/Placeholder";
 
 export const ProductsRow = styled("div", ({ $theme }) => ({

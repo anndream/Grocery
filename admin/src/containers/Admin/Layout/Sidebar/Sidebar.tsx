@@ -9,7 +9,7 @@ import {
   CUSTOMERS,
   COUPONS,
   SETTINGS,
-} from "settings/Admin/constants";
+} from "utils/constants";
 import { AuthContext } from "context/Admin/auth";
 
 import { DashboardIcon } from "assets/icons/DashboardIcon";

@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import SettingsCard from "components/Admin/SettingsCard/SettingsCard";
 import { useDrawerDispatch } from "context/Admin/DrawerContext";
-import { STAFF_MEMBERS, SITE_SETTINGS } from "settings/Admin/constants";
+import { STAFF_MEMBERS, SITE_SETTINGS } from "utils/constants";
 import { withStyle } from "baseui";
 
 import { SiteSettings } from "assets/icons/SiteSettings";

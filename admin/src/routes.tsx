@@ -11,7 +11,7 @@ import {
   COUPONS,
   STAFF_MEMBERS,
   SITE_SETTINGS,
-} from "settings/Admin/constants";
+} from "utils/constants";
 import AuthProvider, { AuthContext } from "context/Admin/auth";
 import { InLineLoader } from "components/Admin/InlineLoader/InlineLoader";
 const Products = lazy(() => import("containers/Admin/Products/Products"));

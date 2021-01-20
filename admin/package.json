@@ -27,6 +27,7 @@
     "react-spring-modal": "^1.0.8",
     "styletron-engine-atomic": "^1.4.6",
     "styletron-react": "^5.2.7",
+    "swr": "^0.4.0",
     "typescript": "^3.9.7",
     "yup": "^0.29.3"
   },
