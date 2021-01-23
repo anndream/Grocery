@@ -20,6 +20,8 @@ import * as icons from "assets/icons/category-icons";
 import NoResult from "components/Admin/NoResult/NoResult";
 import useCategory from "services/use-category";
 import { PencilIcon } from "assets/icons/PencilIcon";
+import ProgressBar from "components/Admin/ProgressBar/ProgressBar";
+import { InLineLoader } from "components/Admin/InlineLoader/InlineLoader";
 
 const GET_CATEGORIES = gql`
   query getCategories($type: String, $searchBy: String) {
@@ -125,6 +127,7 @@ export default function Category() {
 
   return (
     <Grid fluid={true}>
+      {loading ? <InLineLoader /> : null}
       <Row>
         <Col md={12}>
           <Header
