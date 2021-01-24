@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Button } from "components/Client/button/button";
 import { CURRENCY } from "utils/constants";
 import { Scrollbar } from "components/Client/scrollbar/scrollbar";
@@ -42,10 +42,10 @@ import { FormattedMessage } from "react-intl";
 import { useCart } from "context/Client/cart/use-cart";
 import { useWindowSize } from "utils/useWindowSize";
 import Coupon from "components/Client/coupon/coupon";
-import Schedules from "features/schedule/schedule";
-import Contact from "features/contact/contact";
-import Payment from "features/payment/payment";
-import Address from "features/address/address";
+import Schedules from "components/Client/schedule/schedule";
+import Contact from "components/Client/contact/contact";
+import Payment from "components/Client/payment/payment";
+import Address from "components/Client/address/address";
 
 // The type of props Checkout Form receives
 interface MyFormProps {
@@ -76,9 +76,10 @@ const OrderItem: React.FC<CartItemProps> = ({ product }) => {
 };
 
 const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
+  const history = useHistory();
   const [hasCoupon, setHasCoupon] = useState(false);
   const { state } = useContext(ProfileContext);
-  const { isRtl } = useLocale();
+  const isRtl = false;
   const {
     items,
     removeCoupon,
@@ -100,7 +101,7 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
     setLoading(true);
     if (isValid) {
       clearCart();
-      Router.push("/order-received");
+      history.push("/order-received");
     }
     setLoading(false);
   };
@@ -209,7 +210,7 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
                   id="termAndConditionHelper"
                   defaultMessage="By making this purchase you agree to our"
                 />
-                <Link href="#">
+                <Link to="#">
                   <TermConditionLink>
                     <FormattedMessage
                       id="termAndCondition"

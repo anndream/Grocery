@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import { getLocalState, setLocalState } from "utils/localStorage";
-import { BASE_URL, TOKEN_KEY, USER_KEY } from "../utils/constant";
-import { AuthContext } from "contexts/auth/auth.context";
+import { TOKEN_KEY, USER_KEY } from "../utils/constants";
+import { AuthContext } from "context/Client/auth/auth.context";
 import { useContext } from "react";
 
 export default function useUser() {
@@ -18,7 +18,9 @@ export default function useUser() {
       body: formData,
     };
 
-    let { data, meta } = await fetch(`${BASE_URL}/login`, option).then(res => res.json());
+    let { data, meta } = await fetch(`${process.env.REACT_APP_API_URL}/login`, option).then(res =>
+      res.json()
+    );
     let user = restructureUser(data);
     setLocalState(USER_KEY, user);
     setLocalState(TOKEN_KEY, `Bearer ${meta.access_token}`);

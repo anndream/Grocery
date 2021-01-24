@@ -1,5 +1,5 @@
 import React, { useReducer } from "react";
-import { USER_KEY } from "utils/constant";
+import { USER_KEY } from "utils/constants";
 import { getLocalState } from "utils/localStorage";
 import { AuthContext } from "./auth.context";
 const isBrowser = typeof window !== "undefined";

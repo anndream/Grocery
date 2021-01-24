@@ -1,13 +1,17 @@
-import { NextPage } from "next";
+import React from "react";
 import { Modal } from "@redq/reuse-modal";
-import { ProfileProvider } from "contexts/profile/profile.provider";
-import SettingsContent from "features/user-profile/settings/settings";
-import { PageWrapper, SidebarSection, ContentBox } from "features/user-profile/user-profile.style";
-import Sidebar from "features/user-profile/sidebar/sidebar";
-import { SEO } from "components/seo";
-import Footer from "layouts/footer";
-import ErrorMessage from "components/error-message/error-message";
-import useUser from "data/use-user";
+import { ProfileProvider } from "context/Client/profile/profile.provider";
+import SettingsContent from "components/Client/user-profile/settings/settings";
+import {
+  PageWrapper,
+  SidebarSection,
+  ContentBox,
+} from "components/Client/user-profile/user-profile.style";
+import Sidebar from "components/Client/user-profile/sidebar/sidebar";
+import { SEO } from "components/Client/seo";
+import Footer from "./layouts/footer";
+import ErrorMessage from "components/Client/error-message/error-message";
+import useUser from "services/use-user";
 
 type Props = {
   deviceType?: {
@@ -16,7 +20,7 @@ type Props = {
     desktop: boolean;
   };
 };
-const ProfilePage: NextPage<Props> = ({ deviceType }) => {
+const ProfilePage = ({ deviceType }) => {
   const { user } = useUser();
   if (!user) return <div>Please login</div>;
 

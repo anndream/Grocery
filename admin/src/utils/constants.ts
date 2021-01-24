@@ -16,3 +16,4 @@ export const SITE_SETTINGS = "/site-settings";
 export const CURRENCY = "$";
 export const TOKEN_KEY = "access_token";
 export const TEST_TOKEN = "Bearer 1|vyETodUeKtMeTala0LLAOVuWkeCcBnlGl9PFk3uh";
+export const USER_KEY = "authenticated_user";

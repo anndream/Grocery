@@ -1,12 +1,11 @@
 import React from "react";
-import { NextPage } from "next";
-import { SEO } from "components/seo";
-import Order from "features/user-profile/order/order";
-import { PageWrapper, SidebarSection } from "features/user-profile/user-profile.style";
-import Sidebar from "features/user-profile/sidebar/sidebar";
+import { SEO } from "components/Client/seo";
+import Order from "components/Client/user-profile/order/order";
+import { PageWrapper, SidebarSection } from "components/Client/user-profile/user-profile.style";
+import Sidebar from "components/Client/user-profile/sidebar/sidebar";
 import { Modal } from "@redq/reuse-modal";
 
-const OrderPage: NextPage = () => {
+const OrderPage = () => {
   return (
     <>
       <SEO title="Order - PickBazar" description="Order Details" />

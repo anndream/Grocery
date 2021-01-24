@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import React from "react";
 import Sticky from "react-stickynode";
 import {
   StyledContainer,
@@ -8,14 +8,14 @@ import {
   StyledLeftInnerContent,
   StyledRightContent,
   StyledContentHeading,
-} from "features/terms-and-services/terms-and-services";
-import { Heading } from "components/heading/heading";
+} from "components/Client/terms-and-services/terms-and-services";
+import { Heading } from "components/Client/heading/heading";
 import { Element } from "react-scroll";
-import { SEO } from "components/seo";
+import { SEO } from "components/Client/seo";
 import { useMedia } from "utils/use-media";
-import { sitePrivacyPolicy } from "site-settings/site-privacy-policy";
+import { sitePrivacyPolicy } from "utils/site-privacy-policy";
 
-const PrivacyPage: NextPage<{}> = () => {
+const PrivacyPage = () => {
   const { title, date, content } = sitePrivacyPolicy;
   const mobile = useMedia("(max-width: 580px)");
   const menuItems: string[] = [];

@@ -1,19 +1,17 @@
-import React from "react";
-import { NextPage } from "next";
-import dynamic from "next/dynamic";
-import { SEO } from "components/seo";
-import CartPopUp from "features/carts/cart-popup";
+import React, { lazy } from "react";
+import { SEO } from "components/Client/seo";
+import CartPopUp from "components/Client/cart/cart-popup";
 import { Modal } from "@redq/reuse-modal";
-import GiftCard from "components/gift-card/gift-card";
-import Footer from "layouts/footer";
-import useCoupon from "data/use-coupon";
+import GiftCard from "components/Client/gift-card/gift-card";
+import Footer from "./layouts/footer";
+import useCoupon from "services/use-coupon";
 import {
   OfferPageWrapper,
   ProductsRow,
   MainContentArea,
   ProductsCol,
 } from "assets/styles/pages.style";
-const ErrorMessage = dynamic(() => import("components/error-message/error-message"));
+const ErrorMessage = lazy(() => import("components/Client/error-message/error-message"));
 
 type GiftCardProps = {
   deviceType: {
@@ -23,7 +21,7 @@ type GiftCardProps = {
   };
 };
 
-const GiftCardPage: NextPage<GiftCardProps> = ({ deviceType }) => {
+const GiftCardPage = ({ deviceType }) => {
   const { data, error } = useCoupon();
   if (error) return <ErrorMessage message={error.message} />;
   if (!data) return <p>Loading...</p>;

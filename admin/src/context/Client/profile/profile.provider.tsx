@@ -1,10 +1,10 @@
 import React, { useContext, useReducer } from "react";
 import { v4 as uuidV4 } from "uuid";
-import schedules from "features/checkouts/data";
+import schedules from "services/dummy-checkouts";
 import { ProfileContext } from "./profile.context";
 import { AuthContext } from "../auth/auth.context";
 import { getLocalState } from "utils/localStorage";
-import { USER_KEY } from "utils/constant";
+import { USER_KEY } from "utils/constants";
 
 type Action =
   | { type: "HANDLE_ON_INPUT_CHANGE"; payload: any }

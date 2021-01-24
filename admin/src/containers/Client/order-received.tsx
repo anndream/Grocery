@@ -1,6 +1,6 @@
 import React from "react";
-import { SEO } from "components/seo";
-import OrderReceived from "features/order-received/order-received";
+import { SEO } from "components/Client/seo";
+import OrderReceived from "components/Client/order/order-received";
 
 const OrderReceivedPage = () => {
   return (
