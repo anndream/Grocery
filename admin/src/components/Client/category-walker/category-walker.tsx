@@ -3,7 +3,8 @@ import { WalkerWrapper, Category, NoCategory, CategoryWrapper } from "./category
 import { Button } from "components/Client/button/button";
 // import { useRouter } from "next/router";
 import startCase from "lodash/startCase";
-const SpringModal = lazy(() => import("components/Client/spring-modal/spring-modal"));
+import SpringModal from "components/Client/spring-modal/spring-modal";
+// const SpringModal = lazy(() => import("components/Client/spring-modal/spring-modal"));
 
 type WalkerProps = {
   parent?: string;

@@ -1,11 +1,11 @@
 import { getLocalState } from "utils/localStorage";
-import { TOKEN_KEY } from "utils/constants";
+import { TOKEN_KEY, TEST_TOKEN } from "utils/constants";
 
 const productUrl = `${process.env.REACT_APP_API_URL}/products`;
 const productFetcher = url =>
   fetch(url, {
     headers: {
-      Authorization: getLocalState(TOKEN_KEY),
+      Authorization: TEST_TOKEN,
       Accept: "application/json",
     },
   }).then(res => res.json());

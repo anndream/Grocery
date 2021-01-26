@@ -15,10 +15,12 @@ import { FormattedMessage } from "react-intl";
 import { Button } from "components/Client/button/button";
 import useProducts from "services/use-products";
 import { useQuery } from "utils/use-query";
-const ErrorMessage = lazy(() => import("components/Client/error-message/error-message"));
-const GeneralCard = lazy(
-  () => import("components/Client/product-card/product-card-one/product-card-one")
-);
+import ErrorMessage from "components/Client/error-message/error-message";
+import GeneralCard from "components/Client/product-card/product-card-one/product-card-one";
+// const ErrorMessage = lazy(() => import("components/Client/error-message/error-message"));
+// const GeneralCard = lazy(
+//   () => import("components/Client/product-card/product-card-one/product-card-one")
+// );
 
 type ProductsProps = {
   deviceType?: {

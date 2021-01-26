@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import Fuse from "fuse.js";
 import { useState } from "react";
-import { TOKEN_KEY } from "utils/constants";
+import { TEST_TOKEN, TOKEN_KEY } from "utils/constants";
 import { getLocalState } from "utils/localStorage";
 
 const productUrl = `${process.env.REACT_APP_API_URL}/products`;
@@ -32,7 +32,7 @@ function search(list, pattern) {
 const productFetcher = url =>
   fetch(url, {
     headers: {
-      Authorization: getLocalState(TOKEN_KEY),
+      Authorization: TEST_TOKEN,
       Accept: "application/json",
     },
   }).then(res => res.json());

@@ -14,23 +14,21 @@ import "rc-drawer/assets/index.css";
 import "rc-table/assets/index.css";
 import "rc-collapse/assets/index.css";
 import "react-multi-carousel/lib/styles.css";
-import "components/multi-carousel/multi-carousel.style.css";
+import "components/Client/multi-carousel/multi-carousel.style.css";
 import "react-spring-modal/dist/index.css";
 import "overlayscrollbars/css/OverlayScrollbars.css";
-import "components/scrollbar/scrollbar.css";
+import "components/Client/scrollbar/scrollbar.css";
 import "@redq/reuse-modal/lib/index.css";
 
 import { GlobalStyle } from "assets/styles/global.style";
 
 // Language translation messages
 import { messages } from "utils/site-translation/messages";
-import "typeface-lato";
-import "typeface-poppins";
+// import "typeface-lato";
+// import "typeface-poppins";
+import { ClientRoutes } from "routes";
 // need to provide types
-export default function ExtendedApp({ Component, pageProps }) {
-  const mobile = useMedia("(max-width: 580px)");
-  const tablet = useMedia("(max-width: 991px)");
-  const desktop = useMedia("(min-width: 992px)");
+export default function ExtendedApp() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <LanguageProvider messages={messages}>
@@ -38,7 +36,7 @@ export default function ExtendedApp({ Component, pageProps }) {
           <AppProvider>
             <AuthProvider>
               <AppLayout>
-                <Component {...pageProps} deviceType={{ mobile, tablet, desktop }} />
+                <ClientRoutes />
               </AppLayout>
               <GlobalStyle />
             </AuthProvider>

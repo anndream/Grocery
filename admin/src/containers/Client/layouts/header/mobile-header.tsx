@@ -11,7 +11,7 @@ import {
   SearchModalClose,
 } from "./header.style";
 import Search from "components/Client/search/search";
-import LogoImage from "assets/images/logo.svg";
+import LogoImage from "assets/image/logo.svg";
 
 import { SearchIcon } from "assets/icons/SearchIcon";
 import { LongArrowLeft } from "assets/icons/LongArrowLeft";

@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import { OFFER_MENU_ITEM, HELP_MENU_ITEM } from "../../../../../../utils/site-navigation";
 import { HelpIcon } from "assets/icons/HelpIcon";
 import { RightMenuBox } from "./right-menu.style";
-const AuthMenu = lazy(() => import("../auth-menu"));
+import AuthMenu from "../auth-menu";
+// const AuthMenu = lazy(() => import("../auth-menu"));
 
 type Props = {
   onLogout: () => void;

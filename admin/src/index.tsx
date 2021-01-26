@@ -1,17 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 import { Client as Styletron } from "styletron-engine-atomic";
 import { Provider as StyletronProvider } from "styletron-react";
 import { BaseProvider } from "baseui";
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import { theme } from "./theme";
-import Routes from "./routes";
+import { AdminRoutes } from "./routes";
 import * as serviceWorker from "./serviceWorker";
 import "react-spring-modal/dist/index.css";
 import "overlayscrollbars/css/OverlayScrollbars.css";
 import "components/Admin/Scrollbar/scrollbar.css";
 import "./theme/global.css";
+import ExtendedApp from "containers/Client/app";
 
 const client = new ApolloClient({
   uri: process.env.REACT_APP_API_URL,
@@ -23,13 +24,19 @@ function App() {
 
   return (
     <BrowserRouter>
-      <ApolloProvider client={client as any}>
-        <StyletronProvider value={engine}>
-          <BaseProvider theme={theme}>
-            <Routes />
-          </BaseProvider>
-        </StyletronProvider>
-      </ApolloProvider>
+      <Route path="/">
+        <ExtendedApp />
+      </Route>
+
+      <Route path="/admin">
+        <ApolloProvider client={client as any}>
+          <StyletronProvider value={engine}>
+            <BaseProvider theme={theme}>
+              <AdminRoutes />
+            </BaseProvider>
+          </StyletronProvider>
+        </ApolloProvider>
+      </Route>
     </BrowserRouter>
   );
 }

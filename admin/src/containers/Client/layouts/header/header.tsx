@@ -6,8 +6,8 @@ import AuthenticationForm from "../../../../components/Client/authentication-for
 import { RightMenu } from "./menu/right-menu/right-menu";
 import { LeftMenu } from "./menu/left-menu/left-menu";
 import HeaderWrapper from "./header.style";
-import LogoImage from "assets/images/logo.svg";
-import UserImage from "assets/images/user.jpg";
+import LogoImage from "assets/image/logo.svg";
+import UserImage from "assets/image/user.jpg";
 import Search from "../../../../components/Client/search/search";
 type Props = {
   className?: string;

@@ -17,9 +17,13 @@ import { SEO } from "components/Client/seo";
 import { useRefScroll } from "../../utils/use-ref-scroll";
 import { ModalProvider } from "../../context/Client/modal/modal.provider";
 
-const Sidebar = lazy(() => import("./layouts/sidebar/sidebar"));
-const Products = lazy(() => import("components/Client/product-grid/product-list/product-list"));
-const CartPopUp = lazy(() => import("components/Client/cart/cart-popup"));
+import Sidebar from "./layouts/sidebar/sidebar";
+import Products from "components/Client/product-grid/product-list/product-list";
+import CartPopUp from "components/Client/cart/cart-popup";
+
+// const Sidebar = lazy(() => import("./layouts/sidebar/sidebar"));
+// const Products = lazy(() => import("components/Client/product-grid/product-list/product-list"));
+// const CartPopUp = lazy(() => import("components/Client/cart/cart-popup"));
 
 const CategoryPage: React.FC<any> = ({ deviceType }) => {
   const { elRef: targetRef, scroll } = useRefScroll({

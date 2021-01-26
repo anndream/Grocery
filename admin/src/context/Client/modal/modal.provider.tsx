@@ -1,8 +1,10 @@
 import React, { useCallback, useState, lazy } from "react";
 import { ModalType, ModalContext } from "./modal.context";
 import { useMedia } from "utils/use-media";
-const SpringModal = lazy(() => import("components/Client/spring-modal/spring-modal"));
-const CenterModal = lazy(() => import("components/Client/modal/center-modal"));
+import SpringModal from "components/Client/spring-modal/spring-modal";
+import CenterModal from "components/Client/modal/center-modal";
+// const SpringModal = lazy(() => import("components/Client/spring-modal/spring-modal"));
+// const CenterModal = lazy(() => import("components/Client/modal/center-modal"));
 
 /**
  * Modal Provider Props

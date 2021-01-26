@@ -21,7 +21,7 @@ import {
   DrawerMenuItem,
   UserOptionMenu,
 } from "./header.style";
-import UserImage from "assets/images/user.jpg";
+import UserImage from "assets/image/user.jpg";
 import { MOBILE_DRAWER_MENU, PROFILE_PAGE } from "utils/site-navigation";
 import { useAppState, useAppDispatch } from "context/Client/app/app.provider";
 import { useHistory, useLocation } from "react-router-dom";

@@ -17,8 +17,10 @@ export default function useCategory(search) {
   const loading = !data && !error;
   let categories = data && data.data;
 
-  if (!isNullOrEmpty(search)) categories = categories.filter(x => x.name.includes(search));
+  // if (categories && !isNullOrEmpty(search))
+  //   categories = categories.filter(x => x.name.includes(search));
 
+  console.log(categories);
   return {
     loading,
     error,

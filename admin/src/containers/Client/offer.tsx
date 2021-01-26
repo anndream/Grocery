@@ -11,7 +11,8 @@ import {
   MainContentArea,
   ProductsCol,
 } from "assets/styles/pages.style";
-const ErrorMessage = lazy(() => import("components/Client/error-message/error-message"));
+import ErrorMessage from "components/Client/error-message/error-message";
+// const ErrorMessage = lazy(() => import("components/Client/error-message/error-message"));
 
 type GiftCardProps = {
   deviceType: {

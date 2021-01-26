@@ -3,9 +3,10 @@ import { SEO } from "components/Client/seo";
 import { Modal } from "@redq/reuse-modal";
 import ProductSingleWrapper, { ProductSingleContainer } from "assets/styles/product-single.style";
 import { getAllProducts, getProductById } from "services/product";
-
-const ProductDetails = lazy(() => import("components/Client/product-details/product-details"));
-const CartPopUp = lazy(() => import("components/Client/cart/cart-popup"));
+import ProductDetails from "components/Client/product-details/product-details";
+import CartPopUp from "components/Client/cart/cart-popup";
+// const ProductDetails = lazy(() => import("components/Client/product-details/product-details"));
+// const CartPopUp = lazy(() => import("components/Client/cart/cart-popup"));
 
 type Props = {
   deviceType?: {

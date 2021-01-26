@@ -11,9 +11,12 @@ import {
   COUPONS,
   STAFF_MEMBERS,
   SITE_SETTINGS,
+  MAIN,
 } from "utils/constants";
 import AuthProvider, { AuthContext } from "context/Admin/auth";
 import { InLineLoader } from "components/Admin/InlineLoader/InlineLoader";
+import CategoryPage from "containers/Client/main";
+import { useMedia } from "utils/use-media";
 const Products = lazy(() => import("containers/Admin/Products/Products"));
 const AdminLayout = lazy(() => import("containers/Admin/Layout/Layout"));
 const Dashboard = lazy(() => import("containers/Admin/Dashboard/Dashboard"));
@@ -56,7 +59,7 @@ function PrivateRoute({ children, ...rest }) {
   );
 }
 
-const AdminRoutes = () => {
+export const AdminRoutes = () => {
   return (
     <AuthProvider>
       <Suspense fallback={<InLineLoader />}>
@@ -134,22 +137,22 @@ const AdminRoutes = () => {
   );
 };
 
-const ClientRoutes = () => {
+export const ClientRoutes = () => {
+  const mobile = useMedia("(max-width: 580px)");
+  const tablet = useMedia("(max-width: 991px)");
+  const desktop = useMedia("(min-width: 992px)");
+
   return (
     <AuthProvider>
-      <Suspense fallback={<InLineLoader />}>
-        <Switch>
-          <Route path="/test">
-            <div>Some test shits</div>
-          </Route>
-        </Switch>
-      </Suspense>
+      <PrivateRoute path={MAIN}>
+        <CategoryPage deviceType={{ mobile, tablet, desktop }} />
+      </PrivateRoute>
     </AuthProvider>
   );
 };
 
-const Routes = () => {
-  return <AdminRoutes />;
-};
+// const Routes = () => {
+//   return <AdminRoutes />;
+// };
 
-export default Routes;
+// export default Routes;

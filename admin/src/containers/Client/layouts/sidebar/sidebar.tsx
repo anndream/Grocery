@@ -22,6 +22,7 @@ import { REQUEST_MEDICINE_MENU_ITEM } from "utils/site-navigation";
 import useCategory from "services/use-category";
 import ErrorMessage from "components/Client/error-message/error-message";
 import CategoryWalker from "components/Client/category-walker/category-walker";
+import { useQuery } from "utils/use-query";
 
 type SidebarCategoryProps = {
   deviceType: {
@@ -40,8 +41,9 @@ const SidebarCategory: React.FC<SidebarCategoryProps> = ({
   const { categories, error } = useCategory({ type });
   const isSidebarSticky = useAppState("isSidebarSticky");
 
-  const location = useLocation<any>();
-  const selectedQueries = location.state.category;
+  // const location = useLocation<any>();
+  const query = useQuery();
+  const selectedQueries = query.category;
 
   if (error) return <ErrorMessage message={error.message} />;
   // const { pathname, query } = router;

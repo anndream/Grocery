@@ -5,7 +5,8 @@ import { useAppState } from "context/Client/app/app.provider";
 import Header from "./header/header";
 import { LayoutWrapper } from "./layout.style";
 import { isCategoryPage } from "./is-home-page";
-const MobileHeader = lazy(() => import("./header/mobile-header"));
+import MobileHeader from "./header/mobile-header";
+// const MobileHeader = lazy(() => import("./header/mobile-header"));
 
 type LayoutProps = {
   className?: string;

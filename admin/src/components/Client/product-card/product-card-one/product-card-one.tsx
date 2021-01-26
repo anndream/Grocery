@@ -17,7 +17,8 @@ import { CartIcon } from "assets/icons/CartIcon";
 import { useModal } from "context/Client/modal/use-modal";
 import { useHistory, useLocation } from "react-router-dom";
 import { useQuery } from "utils/use-query";
-const QuickViewMobile = lazy(() => import("components/Client/quick-view/quick-view-mobile"));
+import QuickViewMobile from "components/Client/quick-view/quick-view-mobile";
+
 type ProductCardProps = {
   title: string;
   image: any;
