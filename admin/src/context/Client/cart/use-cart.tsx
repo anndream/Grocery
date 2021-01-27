@@ -66,8 +66,11 @@ const useCartActions = (initialCart = INITIAL_STATE) => {
   };
 
   const getItemsCount = state.items?.reduce((acc, item) => acc + item.quantity, 0);
-  const getItemCount = id =>
-    state.items?.find(x => x.id === id).reduce((acc, item) => acc + item.quantity, 0);
+  const getItemCount = id => {
+    let cartProduct = state.items?.find(x => x.id === id);
+    if (cartProduct) return cartProduct.reduce((acc, item) => acc + item.quantity, 0);
+    else return 0;
+  };
 
   return {
     state,
@@ -95,6 +98,7 @@ export const CartProvider = ({ children }) => {
     state,
     rehydrateLocalState,
     getItemsCount,
+    getItemCount,
     addItemHandler,
     removeItemHandler,
     clearItemFromCartHandler,
@@ -120,6 +124,7 @@ export const CartProvider = ({ children }) => {
         isRestaurant: state.isRestaurant,
         cartItemsCount: state.items?.length,
         itemsCount: getItemsCount,
+        getItemCount,
         addItem: addItemHandler,
         removeItem: removeItemHandler,
         removeItemFromCart: clearItemFromCartHandler,

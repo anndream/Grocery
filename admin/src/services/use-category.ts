@@ -12,7 +12,7 @@ const fetcher = url =>
   }).then(res => res.json());
 
 export default function useCategory(search) {
-  let { data, error } = useSWR(categoryUrl, fetcher);
+  let { data, error, mutate } = useSWR(categoryUrl, fetcher);
 
   const loading = !data && !error;
   let categories = data && data.data;
@@ -20,10 +20,64 @@ export default function useCategory(search) {
   // if (categories && !isNullOrEmpty(search))
   //   categories = categories.filter(x => x.name.includes(search));
 
-  console.log(categories);
   return {
     loading,
     error,
     categories,
+    mutate,
+    categoryUrl,
   };
 }
+
+export const saveCategory = async category => {
+  const res = await fetch(categoryUrl, {
+    method: "POST",
+    headers: {
+      Authorization: TEST_TOKEN,
+      Accept: "application/json",
+    },
+    body: new URLSearchParams(category),
+  });
+
+  if (res.ok) {
+    let { status, message } = await res.json();
+    return { status, message, reload: true };
+  } else {
+    return { status: res.status, message: res.statusText, reload: false };
+  }
+};
+
+export const updateCategory = async (category, id) => {
+  const res = await fetch(categoryUrl + "/" + id, {
+    method: "PUT",
+    headers: {
+      Authorization: TEST_TOKEN,
+      Accept: "application/json",
+    },
+    body: new URLSearchParams(category),
+  });
+
+  if (res.ok) {
+    let { status, message } = await res.json();
+    return { status, message, reload: true };
+  } else {
+    return { status: res.status, message: res.statusText, reload: false };
+  }
+};
+
+export const removeCategory = async id => {
+  const res = await fetch(categoryUrl + "/" + id, {
+    method: "DELETE",
+    headers: {
+      Authorization: TEST_TOKEN,
+      Accept: "application/json",
+    },
+  });
+
+  if (res.ok) {
+    let { status, message } = await res.json();
+    return { status, message, reload: true };
+  } else {
+    return { status: res.status, message: res.statusText, reload: false };
+  }
+};

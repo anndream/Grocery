@@ -20,6 +20,6 @@ export const MAIN = "/";
 // **************** GENERIC CONSTANT START **************************
 export const CURRENCY = "$";
 export const TOKEN_KEY = "access_token";
-export const TEST_TOKEN = "Bearer 1|vyETodUeKtMeTala0LLAOVuWkeCcBnlGl9PFk3uh";
+export const TEST_TOKEN = "Bearer 1|TDsNk0gu0ytjGwyXZzMgmjWrolRYOMK89OSvoGWS";
 export const USER_KEY = "authenticated_user";
 // **************** GENERIC CONSTANT END **************************

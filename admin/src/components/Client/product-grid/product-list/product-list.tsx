@@ -40,7 +40,7 @@ export const Products: React.FC<ProductsProps> = ({
 }) => {
   const query = useQuery();
   const [loading, setLoading] = useState(false);
-  const { data, error } = useProducts({
+  const { data, error, next } = useProducts({
     type,
     text: query.text,
     category: query.category,
@@ -108,7 +108,7 @@ export const Products: React.FC<ProductsProps> = ({
         ))}
       </ProductsRow>
 
-      {loadMore && data?.hasMore && (
+      {loadMore && next && (
         <ButtonWrapper>
           <Button
             onClick={handleLoadMore}

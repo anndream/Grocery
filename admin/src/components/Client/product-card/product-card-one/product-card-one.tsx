@@ -76,18 +76,17 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const history = useHistory();
 
   const handleQuickViewModal = () => {
-    const as = `/product/${data.id}`;
+    // const as = `/product/${data.id}`;
 
-    if (pathname === "/product/[slug]") {
-      history.push(pathname);
+    // if (pathname === "/product/[slug]") {
+    //   history.push(as);
 
-      if (typeof window !== "undefined") {
-        window.scrollTo(0, 0);
-      }
-      return;
-    }
+    //   if (typeof window !== "undefined") {
+    //     window.scrollTo(0, 0);
+    //   }
+    //   return;
+    // }
     showModal();
-    history.push(pathname + query);
   };
 
   const [showModal, hideModal] = useModal(
@@ -102,7 +101,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     ),
     {
       onClose: () => {
-        history.push(pathname + query);
+        hideModal();
       },
     }
   );

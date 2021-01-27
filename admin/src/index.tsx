@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Client as Styletron } from "styletron-engine-atomic";
 import { Provider as StyletronProvider } from "styletron-react";
 import { BaseProvider } from "baseui";
@@ -24,19 +24,21 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Route path="/">
-        <ExtendedApp />
-      </Route>
+      <Switch>
+        <Route path="/admin">
+          <ApolloProvider client={client as any}>
+            <StyletronProvider value={engine}>
+              <BaseProvider theme={theme}>
+                <AdminRoutes />
+              </BaseProvider>
+            </StyletronProvider>
+          </ApolloProvider>
+        </Route>
 
-      <Route path="/admin">
-        <ApolloProvider client={client as any}>
-          <StyletronProvider value={engine}>
-            <BaseProvider theme={theme}>
-              <AdminRoutes />
-            </BaseProvider>
-          </StyletronProvider>
-        </ApolloProvider>
-      </Route>
+        <Route path="/">
+          <ExtendedApp />
+        </Route>
+      </Switch>
     </BrowserRouter>
   );
 }

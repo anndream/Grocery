@@ -48,14 +48,10 @@ interface Props {
 export default function useProducts(variables: Props) {
   const { type, text, category, offset = 0, limit = 20 } = variables ?? {};
   const { data, mutate, error } = useSWR(productUrl, productFetcher);
-  const loading = !data && !error;
 
+  const loading = !data && !error;
   let products = data && data.data;
-  // if (category) {
-  //   products = products?.filter(product =>
-  //     product.categories.find(category_item => category_item.slug === category)
-  //   );
-  // }
+
   if (text) {
     products = search(products, text);
   }
@@ -64,7 +60,7 @@ export default function useProducts(variables: Props) {
     loading,
     error,
     data: products?.slice(offset, offset + limit),
-    // hasMore,
+    next: data?.meta.pagination.links.next,
     mutate,
     // fetchMore,
   };

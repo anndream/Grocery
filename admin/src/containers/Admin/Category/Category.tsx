@@ -18,7 +18,7 @@ import {
 import { Plus } from "assets/icons/Plus";
 import * as icons from "assets/icons/category-icons";
 import NoResult from "components/Admin/NoResult/NoResult";
-import useCategory from "services/use-category";
+import useCategory, { removeCategory } from "services/use-category";
 import { PencilIcon } from "assets/icons/PencilIcon";
 import ProgressBar from "components/Admin/ProgressBar/ProgressBar";
 import { InLineLoader } from "components/Admin/InlineLoader/InlineLoader";
@@ -65,17 +65,34 @@ export default function Category() {
   const [checkedId, setCheckedId] = useState([]);
   const [checked, setChecked] = useState(false);
 
+  const { categories, error, loading, mutate, categoryUrl } = useCategory(search);
+
   const openDrawer = useCallback(
-    () => dispatch({ type: "OPEN_DRAWER", drawerComponent: "CATEGORY_FORM" }),
+    () =>
+      dispatch({
+        type: "OPEN_DRAWER",
+        drawerComponent: "CATEGORY_FORM",
+        data: { mutate: () => mutate(categoryUrl) },
+      }),
     [dispatch]
   );
 
   const editCategory = category => {
-    dispatch({ type: "OPEN_DRAWER", drawerComponent: "CATEGORY_FORM", data: { category } });
+    dispatch({
+      type: "OPEN_DRAWER",
+      drawerComponent: "CATEGORY_FORM",
+      data: { category, mutate: () => mutate(categoryUrl) },
+    });
   };
 
-  // const { categories, error, refetch } = useQuery(GET_CATEGORIES);
-  const { categories, error, loading } = useCategory(search);
+  const deleteCategory = async id => {
+    let confirmed = window.confirm("Are you sure?");
+    if (confirmed) {
+      let { message, reload } = await removeCategory(id);
+      alert(message);
+      if (reload) mutate(categoryUrl);
+    }
+  };
 
   if (error) {
     return <div>Error! {error.message}</div>;
@@ -275,6 +292,7 @@ export default function Category() {
                                 }),
                               },
                             }}
+                            onClick={() => deleteCategory(item.id)}
                           >
                             Delete
                           </Button>

@@ -15,11 +15,19 @@ import { FormFields, FormLabel } from "components/Admin/FormFields/FormFields";
 import { Input } from "baseui/input";
 import { Button, KIND } from "baseui/button";
 import { Textarea } from "components/Admin/Textarea/Textarea";
+import { saveCategory, updateCategory } from "services/use-category";
+import { CATEGORY } from "utils/constants";
+import { useHistory } from "react-router-dom";
 
 type Props = any;
 
 const AddCategory: React.FC<Props> = props => {
-  let { category } = useDrawerState("data");
+  const history = useHistory();
+
+  let drawerData = useDrawerState("data");
+  let category = drawerData?.category;
+  let refetch = drawerData?.mutate;
+
   const dispatch = useDrawerDispatch();
   const closeDrawer = useCallback(() => dispatch({ type: "CLOSE_DRAWER" }), [dispatch]);
   const { register, handleSubmit, setValue } = useForm({
@@ -44,15 +52,25 @@ const AddCategory: React.FC<Props> = props => {
   //   },
   // });
 
-  const onSubmit = ({ name, description }) => {
-    const newCategory = {
+  const onComplete = ({ message, reload }) => {
+    alert(message);
+    if (reload) refetch();
+    closeDrawer();
+  };
+
+  const onSubmit = async ({ name, description }) => {
+    const editedCategory = {
       name: name,
       description: description,
       creation_date: new Date(),
     };
     // call for create
-    console.log(newCategory, "newCategory");
-    closeDrawer();
+    if (category) {
+      onComplete(await updateCategory(editedCategory, category.id));
+    } else {
+      onComplete(await saveCategory(editedCategory));
+    }
+    // closeDrawer();
   };
   // const handleChange = ({ value }) => {
   //   setValue("parent", value);

@@ -49,7 +49,7 @@ function PrivateRoute({ children, ...rest }) {
         ) : (
           <Redirect
             to={{
-              pathname: "/login",
+              pathname: "/admin/login",
               state: { from: location },
             }}
           />
@@ -144,9 +144,7 @@ export const ClientRoutes = () => {
 
   return (
     <AuthProvider>
-      <PrivateRoute path={MAIN}>
-        <CategoryPage deviceType={{ mobile, tablet, desktop }} />
-      </PrivateRoute>
+      <CategoryPage deviceType={{ mobile, tablet, desktop }} />
     </AuthProvider>
   );
 };
