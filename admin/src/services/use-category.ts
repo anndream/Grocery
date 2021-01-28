@@ -2,7 +2,7 @@ import useSWR from "swr";
 import { TEST_TOKEN } from "utils/constants";
 import { isNullOrEmpty } from "utils/stringHelper";
 
-const categoryUrl = `${process.env.REACT_APP_API_URL}/categories`;
+const categoryUrl = `${process.env.REACT_APP_API_URL}/categories?include=subCategories`;
 const fetcher = url =>
   fetch(url, {
     headers: {
@@ -16,9 +16,14 @@ export default function useCategory(search) {
 
   const loading = !data && !error;
   let categories = data && data.data;
-
-  // if (categories && !isNullOrEmpty(search))
-  //   categories = categories.filter(x => x.name.includes(search));
+  categories =
+    categories &&
+    categories.map(c => {
+      return {
+        ...c,
+        children: c.subCategories.data,
+      };
+    });
 
   return {
     loading,

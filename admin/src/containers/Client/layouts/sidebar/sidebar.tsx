@@ -37,7 +37,6 @@ const SidebarCategory: React.FC<SidebarCategoryProps> = ({
   deviceType: { mobile, tablet, desktop },
   type,
 }) => {
-  // const router = useRouter();
   const { categories, error } = useCategory({ type });
   const isSidebarSticky = useAppState("isSidebarSticky");
 

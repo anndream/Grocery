@@ -76,25 +76,25 @@ type Props = {
 export const TreeMenu: React.FC<Props> = ({ data, className, onClick, active }) => {
   const handler = children => {
     return children.map(subOption => {
-      // if (!subOption.children) {
-      //   return (
-      //     <Tree
-      //       key={subOption.name}
-      //       name={subOption.name}
-      //       // icon={subOption.icon}
-      //       depth="child"
-      //       onClick={() => onClick(subOption.slug)}
-      //       defaultOpen={active === subOption.slug}
-      //     />
-      //   );
-      // }
+      if (!subOption.children) {
+        return (
+          <Tree
+            key={subOption.name}
+            name={subOption.name}
+            // icon={subOption.icon}
+            depth="child"
+            onClick={() => onClick(subOption.slug)}
+            defaultOpen={active === subOption.slug}
+          />
+        );
+      }
       return (
         <Tree
           key={subOption.name}
           name={subOption.name}
           // icon={subOption.icon}
-          // dropdown={!subOption.children.length ? false : true}
-          dropdown={false}
+          dropdown={!subOption.children.length ? false : true}
+          // dropdown={false}
           depth="parent"
           onClick={() => onClick(subOption.name)}
           defaultOpen={
@@ -102,7 +102,7 @@ export const TreeMenu: React.FC<Props> = ({ data, className, onClick, active }) 
             false
           }
         >
-          {/* {handler(subOption.children)} */}
+          {handler(subOption.children)}
         </Tree>
       );
     });
