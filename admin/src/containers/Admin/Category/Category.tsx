@@ -1,39 +1,20 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { withStyle } from "baseui";
 import { Grid, Row as Rows, Col as Column } from "components/Admin/FlexBox/FlexBox";
 import { useDrawerDispatch } from "context/Admin/DrawerContext";
-import Select from "components/Admin/Select/Select";
 import Input from "components/Admin/Input/Input";
 import Button from "components/Admin/Button/Button";
 import Checkbox from "components/Admin/CheckBox/CheckBox";
-import { useQuery, gql } from "@apollo/client";
+import { gql } from "@apollo/client";
 import { Wrapper, Header, Heading } from "components/Wrapper.style";
-import {
-  TableWrapper,
-  StyledTable,
-  StyledHeadCell,
-  StyledCell,
-  ImageWrapper,
-} from "./Category.style";
+import { TableWrapper, StyledTable, StyledHeadCell, StyledCell } from "./Category.style";
 import { Plus } from "assets/icons/Plus";
 import * as icons from "assets/icons/category-icons";
 import NoResult from "components/Admin/NoResult/NoResult";
-import useCategory, { removeCategory } from "services/use-category";
-import { PencilIcon } from "assets/icons/PencilIcon";
-import ProgressBar from "components/Admin/ProgressBar/ProgressBar";
+import { getCategories, removeCategory } from "store/Admin/ActionCreators/Category";
 import { InLineLoader } from "components/Admin/InlineLoader/InlineLoader";
-
-const GET_CATEGORIES = gql`
-  query getCategories($type: String, $searchBy: String) {
-    categories(type: $type, searchBy: $searchBy) {
-      id
-      icon
-      name
-      slug
-      type
-    }
-  }
-`;
+import { isNullOrEmpty } from "utils/stringHelper";
 
 const Col = withStyle(Column, () => ({
   "@media only screen and (max-width: 767px)": {
@@ -51,71 +32,50 @@ const Row = withStyle(Rows, () => ({
   },
 }));
 
-const categorySelectOptions = [
-  { value: "grocery", label: "Grocery" },
-  { value: "women-cloths", label: "Women Cloth" },
-  { value: "bags", label: "Bags" },
-  { value: "makeup", label: "Makeup" },
-];
-
 export default function Category() {
-  const [category, setCategory] = useState([]);
   const [search, setSearch] = useState("");
-  const dispatch = useDrawerDispatch();
+  const drawerDispatch = useDrawerDispatch();
   const [checkedId, setCheckedId] = useState([]);
   const [checked, setChecked] = useState(false);
 
-  const { categories, error, loading, mutate, categoryUrl } = useCategory(search);
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector(state => state.common);
+  const { categories } = useSelector(state => state.category);
+
+  useEffect(() => {
+    dispatch(getCategories());
+  }, [dispatch]);
 
   const openDrawer = useCallback(
     () =>
-      dispatch({
+      drawerDispatch({
         type: "OPEN_DRAWER",
         drawerComponent: "CATEGORY_FORM",
-        data: { mutate: () => mutate(categoryUrl) },
       }),
-    [dispatch]
+    [drawerDispatch]
   );
 
   const editCategory = category => {
-    dispatch({
+    drawerDispatch({
       type: "OPEN_DRAWER",
       drawerComponent: "CATEGORY_FORM",
-      data: { category, mutate: () => mutate(categoryUrl) },
+      data: { category },
     });
   };
 
   const deleteCategory = async id => {
     let confirmed = window.confirm("Are you sure?");
     if (confirmed) {
-      let { message, reload } = await removeCategory(id);
-      alert(message);
-      if (reload) mutate(categoryUrl);
+      dispatch(removeCategory(id));
     }
   };
 
   if (error) {
-    return <div>Error! {error.message}</div>;
+    return <div>Error! {error}</div>;
   }
   function handleSearch(event) {
     const value = event.currentTarget.value;
     setSearch(value);
-    // refetch({
-    //   type: category.length ? category[0].value : null,
-    //   searchBy: value,
-    // });
-  }
-  function handleCategory({ value }) {
-    setCategory(value);
-    // if (value.length) {
-    //   refetch({
-    //     type: value[0].value,
-    //   });
-    // } else {
-    //   refetch({
-    //     type: null,
-    //   });
-    // }
   }
 
   function onAllCheck(event) {
@@ -137,14 +97,11 @@ export default function Category() {
       setCheckedId(prevState => prevState.filter(id => id !== name));
     }
   }
-  const Icon = ({ name }) => {
-    const TagName = icons[name];
-    return !!TagName ? <TagName /> : <p>Invalid icon {name}</p>;
-  };
+
+  if (loading) return <InLineLoader />;
 
   return (
     <Grid fluid={true}>
-      {loading ? <InLineLoader /> : null}
       <Row>
         <Col md={12}>
           <Header
@@ -236,69 +193,76 @@ export default function Category() {
 
                 {categories ? (
                   categories.length ? (
-                    categories.map((item, index) => (
-                      <React.Fragment key={index}>
-                        <StyledCell>
-                          <Checkbox
-                            name={item.id}
-                            checked={checkedId.includes(item.id)}
-                            onChange={handleCheckbox}
-                            overrides={{
-                              Checkmark: {
-                                style: {
-                                  borderTopWidth: "2px",
-                                  borderRightWidth: "2px",
-                                  borderBottomWidth: "2px",
-                                  borderLeftWidth: "2px",
-                                  borderTopLeftRadius: "4px",
-                                  borderTopRightRadius: "4px",
-                                  borderBottomRightRadius: "4px",
-                                  borderBottomLeftRadius: "4px",
+                    categories
+                      .filter(
+                        x =>
+                          isNullOrEmpty(search) ||
+                          x.name.includes(search) ||
+                          x.description.includes(search)
+                      )
+                      .map((item, index) => (
+                        <React.Fragment key={index}>
+                          <StyledCell>
+                            <Checkbox
+                              name={item.id}
+                              checked={checkedId.includes(item.id)}
+                              onChange={handleCheckbox}
+                              overrides={{
+                                Checkmark: {
+                                  style: {
+                                    borderTopWidth: "2px",
+                                    borderRightWidth: "2px",
+                                    borderBottomWidth: "2px",
+                                    borderLeftWidth: "2px",
+                                    borderTopLeftRadius: "4px",
+                                    borderTopRightRadius: "4px",
+                                    borderBottomRightRadius: "4px",
+                                    borderBottomLeftRadius: "4px",
+                                  },
                                 },
-                              },
-                            }}
-                          />
-                        </StyledCell>
-                        <StyledCell>{item.id}</StyledCell>
-                        {/* <StyledCell>
+                              }}
+                            />
+                          </StyledCell>
+                          <StyledCell>{item.id}</StyledCell>
+                          {/* <StyledCell>
                             <ImageWrapper>
                               <Icon name={row[2]} />
                             </ImageWrapper>
                           </StyledCell> */}
-                        <StyledCell>{item.name}</StyledCell>
-                        <StyledCell>{item.description}</StyledCell>
-                        {/* <StyledCell>{row[5]}</StyledCell> */}
-                        <StyledCell>
-                          <Button
-                            overrides={{
-                              BaseButton: {
-                                style: ({ $theme }) => ({
-                                  padding: "2px 7px",
-                                  marginRight: "2px",
-                                }),
-                              },
-                            }}
-                            onClick={() => editCategory(item)}
-                          >
-                            Edit
-                          </Button>
+                          <StyledCell>{item.name}</StyledCell>
+                          <StyledCell>{item.description}</StyledCell>
+                          {/* <StyledCell>{row[5]}</StyledCell> */}
+                          <StyledCell>
+                            <Button
+                              overrides={{
+                                BaseButton: {
+                                  style: ({}) => ({
+                                    padding: "2px 7px",
+                                    marginRight: "2px",
+                                  }),
+                                },
+                              }}
+                              onClick={() => editCategory(item)}
+                            >
+                              Edit
+                            </Button>
 
-                          <Button
-                            overrides={{
-                              BaseButton: {
-                                style: ({ $theme }) => ({
-                                  padding: "2px 7px",
-                                  backgroundColor: "#fe5960",
-                                }),
-                              },
-                            }}
-                            onClick={() => deleteCategory(item.id)}
-                          >
-                            Delete
-                          </Button>
-                        </StyledCell>
-                      </React.Fragment>
-                    ))
+                            <Button
+                              overrides={{
+                                BaseButton: {
+                                  style: ({}) => ({
+                                    padding: "2px 7px",
+                                    backgroundColor: "#fe5960",
+                                  }),
+                                },
+                              }}
+                              onClick={() => deleteCategory(item.id)}
+                            >
+                              Delete
+                            </Button>
+                          </StyledCell>
+                        </React.Fragment>
+                      ))
                   ) : (
                     <NoResult
                       hideButton={false}

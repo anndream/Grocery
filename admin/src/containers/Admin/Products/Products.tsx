@@ -1,16 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { styled, withStyle } from "baseui";
 import Button from "components/Admin/Button/Button";
 import { Grid, Row as Rows, Col as Column } from "components/Admin/FlexBox/FlexBox";
 import Input from "components/Admin/Input/Input";
 import Select from "components/Admin/Select/Select";
 import { useQuery, gql } from "@apollo/client";
-import { Header, Heading } from "components/Wrapper.style";
+import { Header, Heading, Wrapper } from "components/Wrapper.style";
+
 import Fade from "react-reveal/Fade";
 import ProductCard from "components/Admin/ProductCard/ProductCard";
 import NoResult from "components/Admin/NoResult/NoResult";
 import { CURRENCY } from "utils/constants";
 import Placeholder from "components/Admin/Placeholder/Placeholder";
+import { isNullOrEmpty } from "utils/stringHelper";
+import { getProducts, removeProduct } from "store/Admin/ActionCreators/Product";
+import { useDrawerDispatch } from "context/Admin/DrawerContext";
+import {
+  Icon,
+  ImageWrapper,
+  StyledCell,
+  StyledHeadCell,
+  StyledTable,
+  TableWrapper,
+} from "../Category/Category.style";
+import { Checkbox } from "baseui/checkbox";
 
 export const ProductsRow = styled("div", ({ $theme }) => ({
   display: "flex",
@@ -92,62 +106,92 @@ const priceSelectOptions = [
 ];
 
 export default function Products() {
-  const { data, error, refetch, fetchMore } = useQuery(GET_PRODUCTS);
+  const dispatch = useDispatch();
+  const { products } = useSelector(state => state.product);
+  const { error } = useSelector(state => state.common);
+
+  const drawerDispatch = useDrawerDispatch();
   const [loadingMore, toggleLoading] = useState(false);
   const [type, setType] = useState([]);
   const [priceOrder, setPriceOrder] = useState([]);
   const [search, setSearch] = useState([]);
 
+  useEffect(() => {
+    dispatch(getProducts());
+  }, []);
+
+  const newProductDrawer = React.useCallback(
+    () => drawerDispatch({ type: "OPEN_DRAWER", drawerComponent: "PRODUCT_FORM" }),
+    [drawerDispatch]
+  );
+
+  const editProduct = React.useCallback(
+    item =>
+      drawerDispatch({
+        type: "OPEN_DRAWER",
+        drawerComponent: "PRODUCT_UPDATE_FORM",
+        data: item,
+      }),
+    [drawerDispatch]
+  );
+
+  const deleteProduct = id => {
+    let confirmed = window.confirm("Are you sure?");
+    if (confirmed) {
+      dispatch(removeProduct(id));
+    }
+  };
+
   if (error) {
-    return <div>Error! {error.message}</div>;
+    return <div>Error! {error}</div>;
   }
   function loadMore() {
-    toggleLoading(true);
-    fetchMore({
-      variables: {
-        offset: data.products.items.length,
-      },
-      updateQuery: (prev, { fetchMoreResult }) => {
-        toggleLoading(false);
-        if (!fetchMoreResult) return prev;
-        return Object.assign({}, prev, {
-          products: {
-            __typename: prev.products.__typename,
-            items: [...prev.products.items, ...fetchMoreResult.products.items],
-            hasMore: fetchMoreResult.products.hasMore,
-          },
-        });
-      },
-    });
+    // toggleLoading(true);
+    // fetchMore({
+    //   variables: {
+    //     offset: data.products.items.length,
+    //   },
+    //   updateQuery: (prev, { fetchMoreResult }) => {
+    //     toggleLoading(false);
+    //     if (!fetchMoreResult) return prev;
+    //     return Object.assign({}, prev, {
+    //       products: {
+    //         __typename: prev.products.__typename,
+    //         items: [...prev.products.items, ...fetchMoreResult.products.items],
+    //         hasMore: fetchMoreResult.products.hasMore,
+    //       },
+    //     });
+    //   },
+    // });
   }
   function handlePriceSort({ value }) {
-    setPriceOrder(value);
-    if (value.length) {
-      refetch({
-        sortByPrice: value[0].value,
-      });
-    } else {
-      refetch({
-        sortByPrice: null,
-      });
-    }
+    // setPriceOrder(value);
+    // if (value.length) {
+    //   refetch({
+    //     sortByPrice: value[0].value,
+    //   });
+    // } else {
+    //   refetch({
+    //     sortByPrice: null,
+    //   });
+    // }
   }
   function handleCategoryType({ value }) {
-    setType(value);
-    if (value.length) {
-      refetch({
-        type: value[0].value,
-      });
-    } else {
-      refetch({
-        type: null,
-      });
-    }
+    // setType(value);
+    // if (value.length) {
+    //   refetch({
+    //     type: value[0].value,
+    //   });
+    // } else {
+    //   refetch({
+    //     type: null,
+    //   });
+    // }
   }
   function handleSearch(event) {
     const value = event.currentTarget.value;
     setSearch(value);
-    refetch({ searchText: value });
+    // refetch({ searchText: value });
   }
 
   return (
@@ -172,19 +216,6 @@ export default function Products() {
                     onChange={handleCategoryType}
                   />
                 </Col>
-
-                <Col md={3} xs={12}>
-                  <Select
-                    options={priceSelectOptions}
-                    labelKey="label"
-                    valueKey="value"
-                    value={priceOrder}
-                    placeholder="Price"
-                    searchable={false}
-                    onChange={handlePriceSort}
-                  />
-                </Col>
-
                 <Col md={6} xs={12}>
                   <Input
                     value={search}
@@ -193,50 +224,139 @@ export default function Products() {
                     clearable
                   />
                 </Col>
+
+                <Col md={3} xs={12}>
+                  <Button onClick={newProductDrawer}>Add Products</Button>
+                </Col>
               </Row>
             </Col>
           </Header>
 
-          <Row>
-            {data ? (
-              data.products && data.products.items.length !== 0 ? (
-                data.products.items.map((item: any, index: number) => (
-                  <Col md={4} lg={3} sm={6} xs={12} key={index} style={{ margin: "15px 0" }}>
-                    <Fade bottom duration={800} delay={index * 10}>
-                      <ProductCard
-                        title={item.name}
-                        weight={item.unit}
-                        image={item.image}
-                        currency={CURRENCY}
-                        price={item.price}
-                        salePrice={item.salePrice}
-                        discountInPercent={item.discountInPercent}
-                        data={item}
-                      />
-                    </Fade>
-                  </Col>
-                ))
-              ) : (
-                <NoResult />
-              )
-            ) : (
-              <LoaderWrapper>
-                <LoaderItem>
-                  <Placeholder />
-                </LoaderItem>
-                <LoaderItem>
-                  <Placeholder />
-                </LoaderItem>
-                <LoaderItem>
-                  <Placeholder />
-                </LoaderItem>
-                <LoaderItem>
-                  <Placeholder />
-                </LoaderItem>
-              </LoaderWrapper>
-            )}
-          </Row>
-          {data && data.products && data.products.hasMore && (
+          <Wrapper style={{ boxShadow: "0 0 5px rgba(0, 0 , 0, 0.05)" }}>
+            <TableWrapper style={{ height: "auto" }}>
+              <StyledTable $gridTemplateColumns="auto auto auto auto auto auto auto auto auto auto">
+                <StyledHeadCell>
+                  <Checkbox
+                    type="checkbox"
+                    value="checkAll"
+                    // checked={checked}
+                    // onChange={onAllCheck}
+                    overrides={{
+                      Checkmark: {
+                        style: {
+                          borderTopWidth: "2px",
+                          borderRightWidth: "2px",
+                          borderBottomWidth: "2px",
+                          borderLeftWidth: "2px",
+                          borderTopLeftRadius: "4px",
+                          borderTopRightRadius: "4px",
+                          borderBottomRightRadius: "4px",
+                          borderBottomLeftRadius: "4px",
+                        },
+                      },
+                    }}
+                  />
+                </StyledHeadCell>
+                <StyledHeadCell>Id</StyledHeadCell>
+                <StyledHeadCell>Image</StyledHeadCell>
+                <StyledHeadCell>Name</StyledHeadCell>
+                <StyledHeadCell>Product unit</StyledHeadCell>
+                <StyledHeadCell>Stock amount</StyledHeadCell>
+                <StyledHeadCell>Unit price</StyledHeadCell>
+                <StyledHeadCell>Discount percentage</StyledHeadCell>
+                <StyledHeadCell>Discount amount</StyledHeadCell>
+                <StyledHeadCell>Action</StyledHeadCell>
+
+                {products ? (
+                  products.length !== 0 ? (
+                    products
+                      .filter(
+                        x =>
+                          isNullOrEmpty(search) ||
+                          x.name.includes(search) ||
+                          x.description.includes(search)
+                      )
+                      .map((item, index) => (
+                        <React.Fragment key={index}>
+                          <StyledCell>
+                            <Checkbox
+                              name={item.id}
+                              // checked={checkedId.includes(item.id)}
+                              // onChange={handleCheckbox}
+                              overrides={{
+                                Checkmark: {
+                                  style: {
+                                    borderTopWidth: "2px",
+                                    borderRightWidth: "2px",
+                                    borderBottomWidth: "2px",
+                                    borderLeftWidth: "2px",
+                                    borderTopLeftRadius: "4px",
+                                    borderTopRightRadius: "4px",
+                                    borderBottomRightRadius: "4px",
+                                    borderBottomLeftRadius: "4px",
+                                  },
+                                },
+                              }}
+                            />
+                          </StyledCell>
+                          <StyledCell>{item.id}</StyledCell>
+                          <StyledCell>
+                            <ImageWrapper>
+                              <Icon name={item.bannerImage} />
+                            </ImageWrapper>
+                          </StyledCell>
+                          <StyledCell>{item.name}</StyledCell>
+                          <StyledCell>{item.product_unit}</StyledCell>
+                          <StyledCell>{item.stock_amount}</StyledCell>
+                          <StyledCell>{item.unit_price}</StyledCell>
+                          <StyledCell>{item.discount_percentage}</StyledCell>
+                          <StyledCell>{item.discount_amount}</StyledCell>
+                          <StyledCell>
+                            <Button
+                              overrides={{
+                                BaseButton: {
+                                  style: ({}) => ({
+                                    padding: "2px 7px",
+                                    marginRight: "2px",
+                                  }),
+                                },
+                              }}
+                              onClick={() => editProduct(item)}
+                            >
+                              Edit
+                            </Button>
+
+                            <Button
+                              overrides={{
+                                BaseButton: {
+                                  style: ({}) => ({
+                                    padding: "2px 7px",
+                                    backgroundColor: "#fe5960",
+                                  }),
+                                },
+                              }}
+                              onClick={() => deleteProduct(item.id)}
+                            >
+                              Delete
+                            </Button>
+                          </StyledCell>
+                        </React.Fragment>
+                      ))
+                  ) : (
+                    <NoResult
+                      hideButton={false}
+                      style={{
+                        gridColumnStart: "1",
+                        gridColumnEnd: "one",
+                      }}
+                    />
+                  )
+                ) : null}
+              </StyledTable>
+            </TableWrapper>
+          </Wrapper>
+
+          {products && products.hasMore && (
             <Row>
               <Col md={12} style={{ display: "flex", justifyContent: "center" }}>
                 <Button onClick={loadMore} isLoading={loadingMore}>

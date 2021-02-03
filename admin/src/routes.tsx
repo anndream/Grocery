@@ -1,5 +1,6 @@
 import React, { useContext, lazy, Suspense } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
+import { Provider } from "react-redux";
 import {
   LOGIN,
   PRODUCTS,
@@ -17,6 +18,7 @@ import AuthProvider, { AuthContext } from "context/Admin/auth";
 import { InLineLoader } from "components/Admin/InlineLoader/InlineLoader";
 import CategoryPage from "containers/Client/main";
 import { useMedia } from "utils/use-media";
+import store from "store/Admin";
 const Products = lazy(() => import("containers/Admin/Products/Products"));
 const AdminLayout = lazy(() => import("containers/Admin/Layout/Layout"));
 const Dashboard = lazy(() => import("containers/Admin/Dashboard/Dashboard"));
@@ -60,7 +62,7 @@ function PrivateRoute({ children, ...rest }) {
 }
 
 export const AdminRoutes = () => {
-  return (
+  const Routes = () => (
     <AuthProvider>
       <Suspense fallback={<InLineLoader />}>
         <Switch>
@@ -134,6 +136,12 @@ export const AdminRoutes = () => {
         </Switch>
       </Suspense>
     </AuthProvider>
+  );
+
+  return (
+    <Provider store={store}>
+      <Routes />
+    </Provider>
   );
 };
 

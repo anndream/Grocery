@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { useDrawerDispatch, useDrawerState } from "context/Admin/DrawerContext";
 import { Scrollbars } from "react-custom-scrollbars";
@@ -14,49 +15,21 @@ import {
 import { FormFields, FormLabel } from "components/Admin/FormFields/FormFields";
 import { Input } from "baseui/input";
 import { Button, KIND } from "baseui/button";
-import { Textarea } from "components/Admin/Textarea/Textarea";
-import { saveCategory, updateCategory } from "services/use-category";
-import { CATEGORY } from "utils/constants";
-import { useHistory } from "react-router-dom";
+import { saveCategory, updateCategory } from "store/Admin/ActionCreators/Category";
 
 type Props = any;
 
 const AddCategory: React.FC<Props> = props => {
-  const history = useHistory();
-
   let drawerData = useDrawerState("data");
   let category = drawerData?.category;
   let refetch = drawerData?.mutate;
 
-  const dispatch = useDrawerDispatch();
-  const closeDrawer = useCallback(() => dispatch({ type: "CLOSE_DRAWER" }), [dispatch]);
+  const drawerDispatch = useDrawerDispatch();
+  const dispatch = useDispatch();
+  const closeDrawer = useCallback(() => drawerDispatch({ type: "CLOSE_DRAWER" }), [drawerDispatch]);
   const { register, handleSubmit, setValue } = useForm({
     defaultValues: category ? { ...category } : {},
   });
-
-  // React.useEffect(() => {
-  //   register({ name: "parent" });
-  //   register({ name: "image" });
-  // }, [register]);
-
-  // const [createCategory] = useMutation(CREATE_CATEGORY, {
-  //   update(cache, { data: { createCategory } }) {
-  //     const { categories } = cache.readQuery({
-  //       query: GET_CATEGORIES,
-  //     });
-
-  //     cache.writeQuery({
-  //       query: GET_CATEGORIES,
-  //       data: { categories: categories.concat([createCategory]) },
-  //     });
-  //   },
-  // });
-
-  const onComplete = ({ message, reload }) => {
-    alert(message);
-    if (reload) refetch();
-    closeDrawer();
-  };
 
   const onSubmit = async ({ name, description }) => {
     const editedCategory = {
@@ -66,11 +39,11 @@ const AddCategory: React.FC<Props> = props => {
     };
     // call for create
     if (category) {
-      onComplete(await updateCategory(editedCategory, category.id));
+      dispatch(updateCategory(editedCategory, category.id));
     } else {
-      onComplete(await saveCategory(editedCategory));
+      dispatch(saveCategory(editedCategory));
     }
-    // closeDrawer();
+    closeDrawer();
   };
   // const handleChange = ({ value }) => {
   //   setValue("parent", value);

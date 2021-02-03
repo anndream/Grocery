@@ -42,10 +42,6 @@ const Topbar = ({ refs }: any) => {
   const dispatch = useDrawerDispatch();
   const { signout } = React.useContext(AuthContext);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const openDrawer = useCallback(
-    () => dispatch({ type: "OPEN_DRAWER", drawerComponent: "PRODUCT_FORM" }),
-    [dispatch]
-  );
 
   return (
     <TopbarWrapper ref={refs}>
@@ -100,8 +96,6 @@ const Topbar = ({ refs }: any) => {
       </DrawerWrapper>
 
       <TopbarRightSide>
-        <Button onClick={openDrawer}>Add Products</Button>
-
         <Popover
           content={({ close }) => <Notification data={data} onClear={close} />}
           accessibilityType={"tooltip"}
