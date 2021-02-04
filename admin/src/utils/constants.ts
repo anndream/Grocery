@@ -19,7 +19,10 @@ export const MAIN = "/";
 
 // **************** GENERIC CONSTANT START **************************
 export const CURRENCY = "$";
-export const TOKEN_KEY = "access_token";
+export const TOKEN_KEY = "CLNT_TOKEN";
+export const CLIENT_TOKEN_KEY = "CLNT_TOKEN";
+export const ADMIN_TOKEN_KEY = "ADMN_TOKEN";
 export const TEST_TOKEN = "Bearer 1|TDsNk0gu0ytjGwyXZzMgmjWrolRYOMK89OSvoGWS";
-export const USER_KEY = "authenticated_user";
+export const USER_KEY = "USER";
+export const ADMIN_KEY = "ADMIN";
 // **************** GENERIC CONSTANT END **************************

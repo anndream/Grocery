@@ -1,12 +1,12 @@
 import React, { useReducer } from "react";
-import { USER_KEY } from "utils/constants";
+import { CLIENT_TOKEN_KEY, USER_KEY } from "utils/constants";
 import { getLocalState } from "utils/localStorage";
 import { AuthContext } from "./auth.context";
 const isBrowser = typeof window !== "undefined";
 
 const user = getLocalState(USER_KEY);
 const INITIAL_STATE = {
-  isAuthenticated: isBrowser && !!localStorage.getItem("access_token"),
+  isAuthenticated: isBrowser && !!localStorage.getItem(CLIENT_TOKEN_KEY),
   currentForm: "signIn",
   ...(user ? user : {}),
 };

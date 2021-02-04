@@ -7,6 +7,7 @@ import { Wrapper, FormWrapper, LogoImage, LogoWrapper } from "./Login.style";
 import Input from "components/Admin/Input/Input";
 import Button from "components/Admin/Button/Button";
 import Logoimage from "assets/image/PickBazar.png";
+import { DASHBOARD } from "utils/constants";
 
 export default () => {
   let history = useHistory();
@@ -16,9 +17,9 @@ export default () => {
 
   const { register, errors, handleSubmit } = useForm();
 
-  let { from } = (location.state as any) || { from: { pathname: "/" } };
+  let { from } = (location.state as any) || { from: { pathname: DASHBOARD } };
   let login = ({ username, password }) => {
-    authenticate({ username, password }, () => {
+    authenticate({ email: username, password }, () => {
       history.replace(from);
     });
   };
@@ -35,13 +36,9 @@ export default () => {
 
           <FormFields>
             <FormLabel>Username</FormLabel>
-            <Input
-              name="username"
-              inputRef={register({
-                required: "Email required",
-              })}
-            />
-            {errors.username && <Error>{errors.username}</Error>}
+            <Input name="username" inputRef={register({ required: true })} />
+            {/* {errors.username ? <Error>{errors.username}</Error> : null} */}
+            {/* {errors.username} */}
           </FormFields>
 
           <FormFields>
@@ -50,11 +47,12 @@ export default () => {
               type="password"
               name="password"
               inputRef={register({
-                required: "Password required",
+                required: true,
               })}
               placeholder="Ex: demo"
             />
-            {errors.password && <Error>{errors.password}</Error>}
+            {/* {errors.password ? <Error>{errors.password}</Error> : null} */}
+            {/* {errors.password} */}
           </FormFields>
 
           <Button

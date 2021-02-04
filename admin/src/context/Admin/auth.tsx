@@ -1,4 +1,7 @@
 import React from "react";
+import { login } from "services/auth";
+import { ADMIN_TOKEN_KEY } from "utils/constants";
+import { isNullOrEmpty } from "utils/stringHelper";
 
 type AuthProps = {
   isAuthenticated: boolean;
@@ -9,24 +12,27 @@ type AuthProps = {
 export const AuthContext = React.createContext({} as AuthProps);
 
 const isValidToken = () => {
-  const token = localStorage.getItem("pickbazar_token");
+  const token = localStorage.getItem(ADMIN_TOKEN_KEY);
   // JWT decode & check token validity & expiration.
-  if (token) return true;
-  return false;
+  if (isNullOrEmpty(token)) return false;
+  else return true;
 };
 
 const AuthProvider = (props: any) => {
   const [isAuthenticated, makeAuthenticated] = React.useState(isValidToken());
-  function authenticate({ email, password }, cb) {
-    makeAuthenticated(true);
-    localStorage.setItem("pickbazar_token", `${email}.${password}`);
-    setTimeout(cb, 100); // fake async
+
+  async function authenticate({ email, password }, cb) {
+    let { success, message } = await login({ email, password });
+    if (success) cb();
+    else alert(message);
   }
+
   function signout(cb) {
     makeAuthenticated(false);
-    localStorage.removeItem("pickbazar_token");
+    localStorage.removeItem(ADMIN_TOKEN_KEY);
     setTimeout(cb, 100);
   }
+
   return (
     <AuthContext.Provider
       value={{

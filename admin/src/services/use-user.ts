@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import { getLocalState, setLocalState } from "utils/localStorage";
-import { TOKEN_KEY, USER_KEY } from "../utils/constants";
+import { CLIENT_TOKEN_KEY, USER_KEY } from "../utils/constants";
 import { AuthContext } from "context/Client/auth/auth.context";
 import { useContext } from "react";
 
@@ -23,7 +23,7 @@ export default function useUser() {
     );
     let user = restructureUser(data);
     setLocalState(USER_KEY, user);
-    setLocalState(TOKEN_KEY, `Bearer ${meta.access_token}`);
+    setLocalState(CLIENT_TOKEN_KEY, `Bearer ${meta.access_token}`);
   };
   const restructureUser = user => {
     user.address = [user.address];
