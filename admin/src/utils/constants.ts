@@ -15,6 +15,7 @@ export const SITE_SETTINGS = DASHBOARD + "/site-settings";
 
 // **************** CLIENT ROUTE CONSTANT START **************************
 export const MAIN = "/";
+export const CHECKOUT = "/checkout";
 // **************** CLIENT ROUTE CONSTANT END **************************
 
 // **************** GENERIC CONSTANT START **************************

@@ -26,9 +26,9 @@ export default function useUser() {
     setLocalState(CLIENT_TOKEN_KEY, `Bearer ${meta.access_token}`);
   };
   const restructureUser = user => {
-    user.address = [user.address];
-    user.contact = [user.mobile];
-    user.shipping_address = [user.shipping_address];
+    user.address = user.address ? [user.address] : [];
+    user.contact = user.mobile ? [user.mobile] : [];
+    user.shipping_address = user.address ? [user.address] : [];
     user.card = [];
 
     return user;

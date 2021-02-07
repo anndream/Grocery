@@ -17,6 +17,7 @@ import {
 import AuthProvider, { AuthContext } from "context/Admin/auth";
 import { InLineLoader } from "components/Admin/InlineLoader/InlineLoader";
 import CategoryPage from "containers/Client/main";
+import CheckoutPage from "containers/Client/checkout";
 import { useMedia } from "utils/use-media";
 import store from "store/Admin";
 const Products = lazy(() => import("containers/Admin/Products/Products"));
@@ -152,7 +153,12 @@ export const ClientRoutes = () => {
 
   return (
     <AuthProvider>
-      <CategoryPage deviceType={{ mobile, tablet, desktop }} />
+      <Route path="/checkout" exact>
+        <CheckoutPage deviceType={{ mobile, tablet, desktop }} />
+      </Route>
+      <Route path="/" exact>
+        <CategoryPage deviceType={{ mobile, tablet, desktop }} />
+      </Route>
     </AuthProvider>
   );
 };

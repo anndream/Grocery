@@ -1,5 +1,5 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { openModal } from "@redq/reuse-modal";
 import { AuthContext } from "../../../../context/Client/auth/auth.context";
 import AuthenticationForm from "../../../../components/Client/authentication-form";
@@ -9,12 +9,14 @@ import HeaderWrapper from "./header.style";
 import LogoImage from "assets/image/logo.svg";
 import UserImage from "assets/image/user.jpg";
 import Search from "../../../../components/Client/search/search";
+import { CHECKOUT } from "utils/constants";
 type Props = {
   className?: string;
 };
 
 const Header: React.FC<Props> = ({ className }) => {
   const history = useHistory();
+  const location = useLocation();
   const {
     authState: { isAuthenticated },
     authDispatch,
@@ -53,7 +55,7 @@ const Header: React.FC<Props> = ({ className }) => {
     <HeaderWrapper className={className} id="layout-header">
       <LeftMenu logo={LogoImage} />
 
-      <Search minimal={true} className="headerSearch" />
+      {location.pathname !== CHECKOUT && <Search minimal={true} className="headerSearch" />}
 
       <RightMenu
         isAuthenticated={isAuthenticated}

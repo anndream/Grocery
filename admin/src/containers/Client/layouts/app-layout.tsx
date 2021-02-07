@@ -6,6 +6,7 @@ import Header from "./header/header";
 import { LayoutWrapper } from "./layout.style";
 import { isCategoryPage } from "./is-home-page";
 import MobileHeader from "./header/mobile-header";
+import { CHECKOUT } from "utils/constants";
 // const MobileHeader = lazy(() => import("./header/mobile-header"));
 
 type LayoutProps = {
@@ -16,7 +17,10 @@ type LayoutProps = {
 const Layout: React.FunctionComponent<LayoutProps> = ({ className, children, token }) => {
   const { pathname } = useLocation();
   const isSticky =
-    useAppState("isSticky") || pathname === "/furniture-two" || pathname === "/grocery-two";
+    useAppState("isSticky") ||
+    pathname === "/furniture-two" ||
+    pathname === "/grocery-two" ||
+    pathname === CHECKOUT;
 
   // const isHomePage = isCategoryPage(query.type) || true;
   const isHomePage = true;
