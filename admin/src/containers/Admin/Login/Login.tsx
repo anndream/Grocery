@@ -13,7 +13,7 @@ export default () => {
   let history = useHistory();
   let location = useLocation();
   const { authenticate, isAuthenticated } = useContext(AuthContext);
-  if (isAuthenticated) return <Redirect to={{ pathname: "/" }} />;
+  if (isAuthenticated) return <Redirect to={{ pathname: DASHBOARD }} />;
 
   const { register, errors, handleSubmit } = useForm();
 

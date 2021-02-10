@@ -205,7 +205,7 @@ export default function Products() {
 
             <Col md={10} xs={12}>
               <Row>
-                <Col md={3} xs={12}>
+                {/* <Col md={3} xs={12}>
                   <Select
                     options={typeSelectOptions}
                     labelKey="label"
@@ -215,7 +215,7 @@ export default function Products() {
                     searchable={false}
                     onChange={handleCategoryType}
                   />
-                </Col>
+                </Col> */}
                 <Col md={6} xs={12}>
                   <Input
                     value={search}

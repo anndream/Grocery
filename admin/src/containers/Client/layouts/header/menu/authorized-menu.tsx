@@ -16,7 +16,7 @@ export const AuthorizedMenu: React.FC<Props> = ({ onLogout }) => {
       {AUTHORIZED_MENU_ITEMS.map((item, idx) => (
         <NavLink
           key={idx}
-          className="menu-item"
+          className="menu-item auth-nav-item"
           href={item.href}
           label={item.defaultMessage}
           intlId={item.id}

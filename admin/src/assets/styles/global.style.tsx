@@ -203,6 +203,9 @@ export const GlobalStyle = createGlobalStyle(({ theme }) =>
       width: "1px !important",
       whiteSpace: "nowrap !important",
     },
+    ".auth-nav-item>a": {
+      padding: "0 !important",
+    },
     //@ts-ignore
     ...theme.globals,
   })

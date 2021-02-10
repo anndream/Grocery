@@ -68,7 +68,8 @@ const useCartActions = (initialCart = INITIAL_STATE) => {
   const getItemsCount = state.items?.reduce((acc, item) => acc + item.quantity, 0);
   const getItemCount = id => {
     let cartProduct = state.items?.find(x => x.id === id);
-    if (cartProduct) return cartProduct.reduce((acc, item) => acc + item.quantity, 0);
+    if (cartProduct && cartProduct.length > 0)
+      return cartProduct.reduce((acc, item) => acc + item.quantity, 0);
     else return 0;
   };
 
